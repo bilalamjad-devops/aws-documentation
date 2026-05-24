@@ -1,6 +1,5 @@
 
 
-# 🧪 Lab 1: Create Basic VPC (Public + Private)
 Awesome—your cousin is guiding you the right way.
 
 And your idea is solid: before doing the full Terraform architect-level project, first learn each AWS networking piece manually in GUI.
