@@ -1,59 +1,12 @@
+# Lab 1 (Combined)
+
 # AWS VPC Networking Lab: Public & Private Subnets with Bastion Host and NAT Gateway
 
 
-Awesome—your cousin is guiding you the right way.
-
-And your idea is solid: before doing the full Terraform architect-level project, first learn each AWS networking piece manually in GUI.
-
-That makes Terraform *much* easier later because you’ll already understand what each resource does.
-
-Here’s a hands-on AWS Console lab focused exactly on:
-
-✅ Create VPC
-
-✅ Create Public Subnet
-
-✅ Create Private Subnet
-
-✅ Launch public EC2
-
-✅ Launch private EC2
-
-✅ SSH into public server
-
-✅ Jump from public → private server (bastion host)
-
----
-
-# Project 2 Lab (GUI First)
-
-# Scalable Multi-Tier Web App on AWS
 
 ### Goal
 
-Build AWS networking manually:
-
-```text
-VPC
-│
-├── Public Subnet
-│    └── Bastion Host (EC2 with public IP)
-│
-└── Private Subnet
-     └── App Server EC2 (No public IP)
-```
-
-Then connect:
-
-```text
-Laptop → Public EC2 → Private EC2
-```
-
-This is real-world architecture.
-
----
-
-# Architecture
+Build this architecture manually in AWS Console:
 
 ```text
 Internet
@@ -65,11 +18,26 @@ Internet Gateway
 VPC (10.0.0.0/16)
 │
 ├── Public Subnet (10.0.1.0/24)
-│      └── Bastion Host
+│   ├── Bastion Host (public IP)
+│   └── NAT Gateway
 │
 └── Private Subnet (10.0.2.0/24)
-       └── Private EC2
+    └── Private EC2 (no public IP)
 ```
+
+Then test:
+
+```text
+Laptop → Bastion → Private EC2
+```
+
+and
+
+```text
+Private EC2 → Internet through NAT
+```
+
+This matches real production networking.
 
 ---
 
@@ -93,7 +61,7 @@ Name:
 MyProject-VPC
 ```
 
-IPv4 CIDR:
+CIDR:
 
 ```text
 10.0.0.0/16
@@ -105,17 +73,21 @@ Done.
 
 ---
 
-# Part 2 — Create Internet Gateway
+# Part 2 — Internet Gateway
 
 VPC → Internet Gateways
 
-Create:
+Create
+
+Name:
 
 ```text
 MyProject-IGW
 ```
 
-After create:
+Create
+
+Then:
 
 Attach to VPC
 
@@ -127,28 +99,18 @@ MyProject-VPC
 
 Save
 
-Now internet can reach VPC.
-
 ---
 
 # Part 3 — Public Subnet
 
 VPC → Subnets
 
-Create
-
-Values:
+Create subnet
 
 Name:
 
 ```text
 Public-Subnet-1
-```
-
-VPC:
-
-```text
-MyProject-VPC
 ```
 
 AZ:
@@ -165,9 +127,7 @@ CIDR:
 
 Create
 
----
-
-Enable auto public IP:
+Enable public IP:
 
 Select subnet
 
@@ -215,13 +175,11 @@ Important:
 
 # Part 5 — Route Tables
 
-Need 2 route tables
+Need 2
 
 ---
 
 ## Public Route Table
-
-Route Tables
 
 Create
 
@@ -231,17 +189,9 @@ Name:
 Public-RT
 ```
 
-VPC:
+Routes
 
-```text
-MyProject-VPC
-```
-
-Create
-
-Routes tab
-
-Add route
+Add:
 
 Destination:
 
@@ -263,9 +213,7 @@ MyProject-IGW
 
 Save
 
-Subnet associations
-
-Associate:
+Subnet associations:
 
 ```text
 Public-Subnet-1
@@ -283,25 +231,111 @@ Name:
 Private-RT
 ```
 
-Associate with:
+Associate:
 
 ```text
 Private-Subnet-1
 ```
 
-No internet route
+Leave empty for now
 
 Save
 
 ---
 
-# Part 6 — Security Groups
+# Part 6 — NAT Gateway
+
+Needed so private EC2 can access internet
+
+---
+
+## Allocate Elastic IP
+
+VPC
+
+Elastic IPs
+
+Allocate
+
+Save
+
+---
+
+## Create NAT
+
+VPC → NAT Gateways
+
+Create
+
+Name:
+
+```text
+MyProject-NAT
+```
+
+Subnet:
+
+```text
+Public-Subnet-1
+```
+
+Elastic IP:
+
+Select allocated IP
+
+Create
+
+Wait until:
+
+```text
+Available
+```
+
+---
+
+## Update Private Route Table
+
+Open:
+
+```text
+Private-RT
+```
+
+Routes
+
+Add:
+
+Destination:
+
+```text
+0.0.0.0/0
+```
+
+Target:
+
+```text
+NAT Gateway
+```
+
+Choose:
+
+```text
+MyProject-NAT
+```
+
+Save
+
+Now private subnet gets outbound internet.
+
+---
+
+# Part 7 — Security Groups
 
 Create 2
 
 ---
 
-## Bastion SG
+## Bastion-SG
 
 EC2 → Security Groups
 
@@ -331,7 +365,7 @@ Save
 
 ---
 
-## Private Server SG
+## Private-SG
 
 Create
 
@@ -359,15 +393,13 @@ Choose:
 Bastion-SG
 ```
 
-Meaning:
+Save
 
-Only bastion can access private server.
-
-Very important.
+Only bastion can SSH.
 
 ---
 
-# Part 7 — Key Pair
+# Part 8 — Key Pair
 
 EC2 → Key pairs
 
@@ -379,17 +411,21 @@ Name:
 aws-lab-key
 ```
 
+Type:
+
+```text
 PEM
+```
 
 Download
 
-Save file carefully.
+Keep safe
 
 ---
 
-# Part 8 — Launch Bastion Host
+# Part 9 — Launch Bastion Host
 
-Launch EC2
+EC2 → Launch instance
 
 Name:
 
@@ -427,7 +463,7 @@ Subnet:
 Public-Subnet-1
 ```
 
-Auto assign IP:
+Auto public IP:
 
 ```text
 Enable
@@ -441,11 +477,17 @@ Bastion-SG
 
 Launch
 
-Copy public IP.
+Copy public IP
+
+Example:
+
+```text
+13.xx.xx.xx
+```
 
 ---
 
-# Part 9 — Launch Private EC2
+# Part 10 — Launch Private EC2
 
 Launch
 
@@ -473,7 +515,7 @@ Key:
 aws-lab-key
 ```
 
-VPC:
+Network:
 
 ```text
 MyProject-VPC
@@ -509,9 +551,9 @@ Example:
 
 ---
 
-# Part 10 — SSH into Bastion
+# Part 11 — SSH to Bastion
 
-Terminal
+Your terminal:
 
 ```bash
 chmod 400 aws-lab-key.pem
@@ -526,22 +568,20 @@ ssh -i aws-lab-key.pem ec2-user@PUBLIC_IP
 Example:
 
 ```bash
-ssh -i aws-lab-key.pem ec2-user@13.233.x.x
+ssh -i aws-lab-key.pem ec2-user@13.xx.xx.xx
 ```
-
-Connected.
 
 ---
 
-# Part 11 — Copy key inside bastion
+# Part 12 — Copy key to bastion
 
-On laptop:
+From laptop:
 
 ```bash
 scp -i aws-lab-key.pem aws-lab-key.pem ec2-user@PUBLIC_IP:/home/ec2-user/
 ```
 
-Now SSH to bastion again
+SSH again
 
 Inside bastion:
 
@@ -551,7 +591,7 @@ chmod 400 aws-lab-key.pem
 
 ---
 
-# Part 12 — Jump to private server
+# Part 13 — Jump to private EC2
 
 Inside bastion:
 
@@ -566,38 +606,58 @@ Flow:
 ```text
 Laptop
    ↓
-Bastion Host
+Bastion
    ↓
-Private Server
-```
-
-That’s exactly how companies manage private servers.
-
----
-
-# Test
-
-Inside private server:
-
-```bash
-hostname
-```
-
-Check private IP:
-
-```bash
-ip a
-```
-
-Ping bastion:
-
-```bash
-ping 10.0.1.x
+Private EC2
 ```
 
 ---
 
-# Cost Optimization
+# Part 14 — Test NAT
+
+Inside private EC2 run:
+
+Check internet:
+
+```bash
+ping google.com
+```
+
+or
+
+```bash
+sudo yum update -y
+```
+
+If works:
+
+✅ NAT working
+
+Private EC2 has internet without public IP
+
+Exactly how production works.
+
+---
+
+# Final architecture
+
+```text
+Internet
+   │
+IGW
+   │
+Public Subnet
+├── Bastion Host
+└── NAT Gateway
+      │
+      ▼
+Private Subnet
+└── Private EC2
+```
+
+---
+
+# Cost reminder
 
 Use:
 
@@ -605,64 +665,29 @@ Use:
 t2.micro
 ```
 
-Delete after lab:
+Delete after practice:
 
-* EC2
-* VPC
-* IGW
-* Route tables
+✅ EC2
 
-RDS later costs more—skip for now.
+✅ NAT Gateway
+
+✅ Elastic IP
+
+✅ Route tables
+
+✅ VPC
+
+Important:
+
+⚠ NAT Gateway costs money
+
+Delete it after lab
 
 ---
 
-# What next after this
+----
 
-After you finish this GUI lab:
-
-Step 2:
-
-Learn:
-
-✅ Load Balancer
-
-Step 3:
-
-Learn:
-
-✅ Auto Scaling Group
-
-Step 4:
-
-Learn:
-
-✅ RDS private subnet
-
-Step 5:
-
-Convert all into Terraform
-
-Then final project:
-
-# Scalable Multi-Tier Web App on AWS
-
-```text
-Terraform
-→ VPC
-→ Subnets
-→ Bastion
-→ ALB
-→ ASG
-→ RDS
-```
-
-Perfect architect-level project.
-
-And once you finish GUI subnet/jump-host lab, message me and I’ll give you the next lab:
-
-**“Create ALB + Auto Scaling Group using AWS Console”**
-
-
+---
 
 Thank you — glad it helped.
 
@@ -812,32 +837,3 @@ That’s exactly why 2 SGs.
 
 ---
 
-# 2) Strong title for this lab
-
-Here are some professional titles you can use.
-
-### Option 1 (best for resume / project docs)
-
-# AWS VPC Networking Lab: Public & Private Subnets with Bastion Host and NAT Gateway
-
-
-
-This one looks strong and directly connects to your cousin’s project.
-
-Example folder:
-
-```text
-AWS-Labs/
- ├── Lab-1-Scalable-Multi-Tier-AWS-Networking
- ├── Lab-2-ALB-ASG
- ├── Lab-3-RDS
- └── Terraform-Final-Project
-```
-
-Nice progression.
-
-After this, next best lab is:
-
-**ALB + Auto Scaling Group (GUI)**
-
-That will connect perfectly with what you built here.
