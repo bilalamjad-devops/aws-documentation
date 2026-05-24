@@ -1,3 +1,4 @@
+# AWS VPC Networking Lab: Public & Private Subnets with Bastion Host and NAT Gateway
 
 
 Awesome—your cousin is guiding you the right way.
@@ -660,3 +661,183 @@ Perfect architect-level project.
 And once you finish GUI subnet/jump-host lab, message me and I’ll give you the next lab:
 
 **“Create ALB + Auto Scaling Group using AWS Console”**
+
+
+
+Thank you — glad it helped.
+
+And very good question. That part is important to understand before moving to ALB/ASG.
+
+---
+
+# 1) Why we created **2 Security Groups?**
+
+Short answer:
+
+Because each server has a different job.
+
+AWS security groups are like **firewall rules attached to each server**.
+
+We made two so access stays controlled.
+
+---
+
+## Security Group 1 — Bastion-SG
+
+Attached to:
+
+```text
+Bastion Host (public EC2)
+```
+
+Rule:
+
+```text
+Inbound:
+SSH (22)
+Source = My IP
+```
+
+Meaning:
+
+```text
+Your laptop → Bastion = allowed
+Anyone else = blocked
+```
+
+Example:
+
+```text
+Laptop (your IP)
+      ↓ SSH
+Bastion Host
+```
+
+Why?
+
+Because bastion is the only machine exposed to internet.
+
+---
+
+## Security Group 2 — Private-SG
+
+Attached to:
+
+```text
+Private EC2
+```
+
+Rule:
+
+```text
+Inbound:
+SSH (22)
+Source = Bastion-SG
+```
+
+Meaning:
+
+```text
+Bastion → Private EC2 = allowed
+Internet → Private EC2 = blocked
+Laptop → Private EC2 = blocked
+```
+
+Example:
+
+```text
+Laptop
+   ↓
+Bastion
+   ↓
+Private EC2
+```
+
+---
+
+## Why not use ONE security group?
+
+You *can* technically.
+
+But it becomes messy and less secure.
+
+Example if same SG:
+
+```text
+SSH from internet
+SSH between servers
+all mixed together
+```
+
+Then private EC2 may accidentally become reachable.
+
+Production teams separate them.
+
+That gives:
+
+✅ better security
+
+✅ easier troubleshooting
+
+✅ cleaner architecture
+
+✅ follows AWS best practice
+
+---
+
+## Real world example
+
+Think of office building:
+
+Bastion host:
+
+```text
+Main gate guard
+```
+
+Private server:
+
+```text
+Server room inside building
+```
+
+Rules:
+
+```text
+You can enter main gate
+Only guard can enter server room
+```
+
+That’s exactly why 2 SGs.
+
+---
+
+# 2) Strong title for this lab
+
+Here are some professional titles you can use.
+
+### Option 1 (best for resume / project docs)
+
+# AWS VPC Networking Lab: Public & Private Subnets with Bastion Host and NAT Gateway
+
+
+
+This one looks strong and directly connects to your cousin’s project.
+
+Example folder:
+
+```text
+AWS-Labs/
+ ├── Lab-1-Scalable-Multi-Tier-AWS-Networking
+ ├── Lab-2-ALB-ASG
+ ├── Lab-3-RDS
+ └── Terraform-Final-Project
+```
+
+Nice progression.
+
+After this, next best lab is:
+
+**ALB + Auto Scaling Group (GUI)**
+
+That will connect perfectly with what you built here.
