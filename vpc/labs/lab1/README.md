@@ -10,11 +10,17 @@ That makes Terraform *much* easier later because you’ll already understand wha
 Here’s a hands-on AWS Console lab focused exactly on:
 
 ✅ Create VPC
+
 ✅ Create Public Subnet
+
 ✅ Create Private Subnet
+
 ✅ Launch public EC2
+
 ✅ Launch private EC2
+
 ✅ SSH into public server
+
 ✅ Jump from public → private server (bastion host)
 
 ---
