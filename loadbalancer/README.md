@@ -15,7 +15,6 @@ https://medium.com/@aaloktrivedi/leveraging-high-availability-by-creating-an-aws
 
 
 
-
 Good choice — **Load Balancer is VERY important** (used in almost every real system).
 I’ll give you **clean, practical, DevOps-focused content + real labs** (not theory).
 
