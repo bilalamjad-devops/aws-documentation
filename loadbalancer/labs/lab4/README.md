@@ -6,7 +6,6 @@ https://medium.com/@aaloktrivedi/leveraging-high-availability-by-creating-an-aws
 
 
 
-
 - vpc
 - igw
 - 2 public subnets
