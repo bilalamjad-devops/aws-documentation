@@ -1,5 +1,8 @@
 
+https://www.linkedin.com/pulse/set-up-amazon-rds-database-bilal-amjad-axnef/?trackingId=Lk3GHKWSQhmjsg9xf5Otjg%3D%3D
 
+
+https://www.canva.com/design/DAGUgs2gVoo/tGSJIKnj2QqAntUXdzmgFQ/edit
 
 # 🧪 Lab 1: Create RDS and Connect from EC2
 
