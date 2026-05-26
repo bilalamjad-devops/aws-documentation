@@ -1,6 +1,8 @@
+Question: Does Load balancer is placed in public subnet or private subnet?
 
+It depends, If our load balancer is internet facing must be placed in the public subnets because it needs to connect directly to the internet to receive requests from your users
 
-
+If application load balancer job is to route traffic inside your application layers (from Frontend to Backend). then it is placed pivate subnets because its only. 
 
 <img width="720" height="590" alt="1_Z-DC516_NPhaBhs3o0VXVg" src="https://github.com/user-attachments/assets/68beede3-9d5f-4ab8-8ed7-b811d71829e0" />
 
