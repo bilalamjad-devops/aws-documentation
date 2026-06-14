@@ -30,8 +30,8 @@ try:
     cursor = db.cursor()
 
     # 2. Setup Database & Table structures automatically
-    cursor.execute("CREATE DATABASE IF NOT EXISTS school_db")
-    cursor.execute("USE school_db")
+    cursor.execute("CREATE DATABASE IF NOT EXISTS my_db")
+    cursor.execute("USE my_db")
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS students (
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -97,7 +97,7 @@ When successful, your prompt will change to: mysql>
 
 Step 2: Look at the Databases
 
-List all available databases to find the one your Python app created (school_db):
+List all available databases to find the one your Python app created (my_db):
 
 
 ```mysql
@@ -109,7 +109,7 @@ Step 3: Open your Database
 Tell MySQL you want to work inside your specific database:
 
 ```mysql
-USE school_db;
+USE my_db;
 ```
 
 Step 4: Check the Tables
