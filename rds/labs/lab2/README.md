@@ -41,7 +41,7 @@ try:
 
     # 3. GET DATA FROM USER (This takes your input)
     print("\n=====================================")
-    user_input = input("Enter student name to save in DB: ")
+    user_input = input("Enter data to save in DB: ")
     print("=====================================\n")
 
     # 4. Insert your input data safely into MySQL
