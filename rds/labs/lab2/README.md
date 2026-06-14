@@ -1,72 +1,147 @@
-# 🧪 Lab 2: RDS with Application (Real DevOps)
+**Step 1: Run your MySQL Database**
 
-📁 `rds/labs/lab2-rds-with-app/README.md`
-
-## 🎯 Objective
-
-Connect your backend application to RDS.
-
----
-
-## 🏗️ Architecture
-
-```id="27drp9"
-Frontend → Backend (Node.js) → RDS
+```mysql
+docker run --name my-local-mysql -e MYSQL_ROOT_PASSWORD=password123 -p 3306:3306 -d mysql:latest
 ```
 
----
+**Step 2: Bypass the Python Error & Install Driver**
 
-## 🚀 Steps
+Your Python app does not know how to speak "MySQL language" yet. We must install the translator driver. Since you are on a Linux control plane, run this command to bypass that error you saw earlier
 
-### Step 1: Update Backend `.env`
-
-```id="3w9smb"
-DB_HOST=<rds-endpoint>
-DB_USER=admin
-DB_PASSWORD=StrongPassword123
-DB_NAME=mydb
+```mysql
+pip install mysql-connector-python --break-system-packages
 ```
 
----
+**Step 3: Write the Input Application Code**
 
-### Step 2: Update DB Connection Code
+`vi app.py`
 
-Example (Node.js):
 
-```js
-const mysql = require("mysql2");
+```python
+import mysql.connector
 
-const connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-});
+# 1. Connect to your running Docker MySQL container
+try:
+    db = mysql.connector.connect(
+        host="127.0.0.1",       # This points to your local machine / port
+        user="root",
+        password="password123" # Must match your Docker password flag
+    )
+    cursor = db.cursor()
+
+    # 2. Setup Database & Table structures automatically
+    cursor.execute("CREATE DATABASE IF NOT EXISTS school_db")
+    cursor.execute("USE school_db")
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS students (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            student_name VARCHAR(100)
+        )
+    """)
+
+    # 3. GET DATA FROM USER (This takes your input)
+    print("\n=====================================")
+    user_input = input("Enter student name to save in DB: ")
+    print("=====================================\n")
+
+    # 4. Insert your input data safely into MySQL
+    query = "INSERT INTO students (student_name) VALUES (%s)"
+    cursor.execute(query, (user_input,))
+    db.commit() # This saves it permanently!
+    print(f"🎉 Success! '{user_input}' has been saved to MySQL.")
+
+    # 5. Fetch and print everything currently inside the database
+    cursor.execute("SELECT * FROM students")
+    print("\n--- Current Data inside MySQL ---")
+    for row in cursor.fetchall():
+        print(f"Student ID: {row[0]} | Name: {row[1]}")
+    print("---------------------------------\n")
+
+    cursor.close()
+    db.close()
+
+except Exception as error:
+    print(f"❌ Connection Failed! Error details: {error}")
 ```
 
----
 
-### Step 3: Run Application
 
-```bash id="6g3h5k"
-npm start
+**Step 4: Run your App and Test Inputs**
+
+Execute your script using python3:
+
+```python
+python3 app.py
 ```
 
----
 
-## ✅ Expected Outcome
+What will happen next:
 
-* Application stores data in RDS
-* Data persists even if app restarts
+- The terminal will pause and ask: Enter student name to save in DB:
+- Type any name (e.g., Ali Khan) and hit Enter.
+- The script will inject that data into the Docker container, pull the list back out, and display your entry on the screen.
 
----
 
-## 🔐 Real-world Tip
 
-👉 Never hardcode DB credentials
-👉 Use:
+Step 1: Log into the MySQL Container
 
-* AWS Secrets Manager
-* Kubernetes Secrets
+```docker
+docker exec -it my-local-mysql mysql -u root -p
+```
 
----
+- What happens next: The terminal will ask for a Enter password:.
+- Type your password: Type password123 and press Enter.
+
+When successful, your prompt will change to: mysql>
+
+
+Step 2: Look at the Databases
+
+List all available databases to find the one your Python app created (school_db):
+
+
+```mysql
+SHOW DATABASES;
+```
+
+Step 3: Open your Database
+
+Tell MySQL you want to work inside your specific database:
+
+```mysql
+USE school_db;
+```
+
+Step 4: Check the Tables
+
+Verify that the students table exists inside the database:
+
+```mysql
+SHOW TABLES;
+```
+
+Step 5: View Your Stored Data (The Final Proof)
+
+```mysql
+SELECT * FROM students;
+```
+
+You will see a clean table output matching exactly what your script inserted:
+
+```text
++----+--------------+
+
+| id | student_name |
++----+--------------+
+
+|  1 | Ali Khan     |
++----+--------------+
+1 row in set (0.00 sec)
+```
+
+Step 6: Exit the Container
+
+```mysql
+exit;
+```
+
