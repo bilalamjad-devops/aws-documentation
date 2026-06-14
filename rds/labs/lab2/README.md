@@ -50,18 +50,9 @@ try:
     db.commit() # This saves it permanently!
     print(f"🎉 Success! '{user_input}' has been saved to MySQL.")
 
-    # 5. Fetch and print everything currently inside the database
-    cursor.execute("SELECT * FROM my_table")
-    print("\n--- Current Data inside MySQL ---")
-    for row in cursor.fetchall():
-        print(f"Student ID: {row[0]} | Name: {row[1]}")
-    print("---------------------------------\n")
 
     cursor.close()
     db.close()
-
-except Exception as error:
-    print(f"❌ Connection Failed! Error details: {error}")
 ```
 
 
