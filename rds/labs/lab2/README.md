@@ -33,7 +33,7 @@ try:
     cursor.execute("CREATE DATABASE IF NOT EXISTS my_db")
     cursor.execute("USE my_db")
     cursor.execute("""
-        CREATE TABLE IF NOT EXISTS students (
+        CREATE TABLE IF NOT EXISTS my_table (
             id INT AUTO_INCREMENT PRIMARY KEY,
             student_name VARCHAR(100)
         )
@@ -45,13 +45,13 @@ try:
     print("=====================================\n")
 
     # 4. Insert your input data safely into MySQL
-    query = "INSERT INTO students (student_name) VALUES (%s)"
+    query = "INSERT INTO my_table (student_name) VALUES (%s)"
     cursor.execute(query, (user_input,))
     db.commit() # This saves it permanently!
     print(f"🎉 Success! '{user_input}' has been saved to MySQL.")
 
     # 5. Fetch and print everything currently inside the database
-    cursor.execute("SELECT * FROM students")
+    cursor.execute("SELECT * FROM my_table")
     print("\n--- Current Data inside MySQL ---")
     for row in cursor.fetchall():
         print(f"Student ID: {row[0]} | Name: {row[1]}")
@@ -114,7 +114,7 @@ USE my_db;
 
 Step 4: Check the Tables
 
-Verify that the students table exists inside the database:
+Verify that the my_table table exists inside the database:
 
 ```mysql
 SHOW TABLES;
@@ -123,7 +123,7 @@ SHOW TABLES;
 Step 5: View Your Stored Data (The Final Proof)
 
 ```mysql
-SELECT * FROM students;
+SELECT * FROM my_table;
 ```
 
 You will see a clean table output matching exactly what your script inserted:
