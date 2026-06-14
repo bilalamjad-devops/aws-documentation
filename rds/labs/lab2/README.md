@@ -1,6 +1,6 @@
 # Connecting Python to a MySQL Docker Container: A Complete From-Scratch Guide
 
-<img width="1110" height="358" alt="lab1 - 1" src="https://github.com/user-attachments/assets/c2480f94-34d7-4773-ae0d-734fa2ba9b38" />
+<img width="1792" height="592" alt="download" src="https://github.com/user-attachments/assets/2ae3c109-9e17-40dc-a314-5181f1728ef7" />
 
 
 
