@@ -1,7 +1,7 @@
 **Step 1: Run your MySQL Database**
 
 ```mysql
-docker run --name my-local-mysql -e MYSQL_ROOT_PASSWORD=password123 -p 3306:3306 -d mysql:latest
+docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=password123 -p 3306:3306 -d mysql:latest
 ```
 
 **Step 2: Bypass the Python Error & Install Driver**
@@ -77,7 +77,7 @@ What will happen next:
 Step 1: Log into the MySQL Container
 
 ```docker
-docker exec -it my-local-mysql mysql -u root -p
+docker exec -it mysql-container mysql -u root -p
 ```
 
 - What happens next: The terminal will ask for a Enter password:.
