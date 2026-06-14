@@ -1,5 +1,9 @@
 # Connecting Python to a MySQL Docker Container: A Complete From-Scratch Guide
 
+<img width="1110" height="358" alt="lab1 - 1" src="https://github.com/user-attachments/assets/c2480f94-34d7-4773-ae0d-734fa2ba9b38" />
+
+
+
 When starting out in DevOps or backend development, one of the most important milestones is learning how to make an application talk to an isolated database.
 
 In this guide, we are going to do exactly that. We will launch a MySQL database inside a background Docker container, write a simple Python script to send custom input data straight into it, and manually step inside the database to verify our data is safely stored.
@@ -16,6 +20,9 @@ Run this command in your terminal:
 ```docker
 docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=password123 -p 3306:3306 -d mysql:latest
 ```
+
+<img width="1110" height="358" alt="lab1 - 1" src="https://github.com/user-attachments/assets/c8d651ce-546f-4fa0-9a93-1c0cfefe73cd" />
+
 
 **What this flag configuration means:**
 
@@ -37,6 +44,9 @@ To bypass this safely in your testing environment, use the `--break-system-packa
 ```python
 pip install mysql-connector-python --break-system-packages
 ```
+
+<img width="1111" height="207" alt="lab1 - 2" src="https://github.com/user-attachments/assets/79b98035-b832-4428-bd92-b4109395cdf8" />
+
 
 ### Step 3: Write the Input Application Code
 
@@ -87,6 +97,9 @@ except Exception as e:
 ```
 
 
+<img width="1113" height="224" alt="lab1 - 3" src="https://github.com/user-attachments/assets/c4334207-2547-404a-b396-a21659ab0577" />
+
+
 ### Step 4: Run your App and Test Inputs
 
 Execute your script directly from your terminal:
@@ -113,6 +126,9 @@ To prove that the data didn't just disappear into thin air, we can log directly 
 docker exec -it mysql-container mysql -u root -p
 ```
 
+<img width="1111" height="348" alt="lab1 - 4" src="https://github.com/user-attachments/assets/2222bacc-6acf-48ba-8abc-9d244de244f5" />
+
+
 Note: The terminal will prompt you for `Enter password:`. Type `password123` and press Enter. For security reasons, the cursor will not show characters or asterisks while typing.
 
 **2. Find your Database**
@@ -122,12 +138,14 @@ List all active databases to find the one our script automatically generated:
 ```mysql
 SHOW DATABASES;
 ```
+"lab1 - 5" src="https://github.com/user-attachments/assets/d648e8ba-13d9-4645-ad9d-46c55d306b97" />
 
 **3. Open the Database**
 
 ```mysql
 USE my_db;
 ```
+<img width="1112" height="250" alt=<img width="1113" height="141" alt="lab1 - 6" src="https://github.com/user-attachments/assets/a505b34f-6019-4ac4-a066-f3647e017582" />
 
 **4. Check the Tables**
 
@@ -137,6 +155,12 @@ Verify that our generic table was created:
 SHOW TABLES;
 ```
 
+
+
+<img width="1113" height="204" alt="lab1 - 7" src="https://github.com/user-attachments/assets/6b609d7a-cf3e-4e54-9bfe-9fe237d72941" />
+
+
+
 **5. Query the Row Results**
 
 Run a standard selection query to print out the final proof:
@@ -144,6 +168,9 @@ Run a standard selection query to print out the final proof:
 ```mysql
 SELECT * FROM my_table;
 ```
+
+<img width="1113" height="173" alt="lab1 - 8" src="https://github.com/user-attachments/assets/3344e5fe-426d-409a-8ba0-f87aeaef034b" />
+
 
 You will see a clean SQL output table containing your exact custom input data:
 
@@ -165,6 +192,7 @@ Once verified, type this to exit the container shell and return safely to your l
 ```docker
 exit;
 ```
+<img width="1113" height="49" alt="lab1 - 9" src="https://github.com/user-attachments/assets/db710606-15d4-4589-bcaa-12aaf3143b25" />
 
 ## Conclusion
 
