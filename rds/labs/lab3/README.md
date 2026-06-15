@@ -1,4 +1,4 @@
-##3 How to Connect Python Flask to a MySQL Docker Container (Step-by-Step)
+# How to Connect Python Flask to a MySQL Docker Container (Step-by-Step)
 
 
 In my previous guide, we successfully built a CLI bridge between a basic Python script and an isolated MySQL Docker container.
