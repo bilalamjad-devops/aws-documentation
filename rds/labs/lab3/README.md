@@ -151,13 +151,15 @@ SELECT * FROM web_table;
 ```
 
 You will see your clean data pop up on the screen:
+
+```text
 +----+------------------------------------+
 | id | content                            |
 +----+------------------------------------+
 |  1 | Bilal Amjad                        |
 +----+------------------------------------+
 1 row in set (0.00 sec)
-
+```
 
 **4. Exit the Database Container**
 ```mysql
