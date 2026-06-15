@@ -1,16 +1,25 @@
-# Connecting Python Flask to a MySQL Docker Container: A Complete From-Scratch Guide
+##3 How to Connect Python Flask to a MySQL Docker Container (Step-by-Step)
+
 
 In my previous guide, we successfully built a CLI bridge between a basic Python script and an isolated MySQL Docker container.
 
 Today, we are taking our architecture to the next level. We are upgrading our project from a simple CLI script into a fully functional 2-Tier Web Application using Python Flask as our frontend/backend application layer, and Docker for our persistent database layer.
 
-### Step 1: Establish the Database 
+### Step 1: Start the MySQL Container
 
-First, let's spin up our isolated database. If you already have your container running from the previous lab, you can reuse it. If not, launch a fresh one with this terminal command:
+
 
 ```docker
 docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=password123 -p 3306:3306 -d mysql:latest
 ```
+
+### Step 2: Install the Required Packages
+
+```python
+python3 -m pip install Flask mysql-connector-python --break-system-packages
+```
+
+### Step 3: Python Flask Application
 
 ### app.py
 
@@ -106,15 +115,7 @@ if __name__ == '__main__':
 </html>
 ```
 
-### Step 5: Resolve Environments & Deploy
-
-If you are running on a clean control plane or modern Linux environment, verify that your dependencies are mapped explicitly to your runtime using the PEP 668 bypass configurations:
-
-```python
-python3 -m pip install Flask mysql-connector-python --break-system-packages
-```
-
-Once installed, fire up your application server:
+### Step 4: Run the Application and Test Inputs
 
 ```python
 python3 app.py
@@ -122,7 +123,14 @@ python3 app.py
 
 Open your browser and navigate to http://localhost:5000 (or use your cloud platform's web preview port option). Type your custom strings (e.g., Bilal Amjad
 
-### Proof
+
+
+### Step 5: View Your Stored Data (The Final Proof)
+
+Let's log directly inside our background Docker container to verify the data is sitting safely in our database.
+
+
+**1. Enter the Container Shell**
 
 ```docker
 docker exec -it mysql-container mysql -u root -p
@@ -130,11 +138,19 @@ docker exec -it mysql-container mysql -u root -p
 
 (Enter password: password123 when prompted)
 
+
+**2. Select Your Database**
+
 ```mysql
 USE web_db;
+```
+**3. View the Data Table**
+
+```mysql
 SELECT * FROM web_table;
 ```
 
+You will see your clean data pop up on the screen:
 +----+------------------------------------+
 | id | content                            |
 +----+------------------------------------+
@@ -142,6 +158,11 @@ SELECT * FROM web_table;
 +----+------------------------------------+
 1 row in set (0.00 sec)
 
+
+**4. Exit the Database Container**
+```mysql
+exit;
+```
 
 Conclusion
 Congratulations! 🚀 You have just built, verified, and successfully tested a multi-tier containerized application workflow.
