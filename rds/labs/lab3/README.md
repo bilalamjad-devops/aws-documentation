@@ -1,13 +1,18 @@
 # How to Connect Python Flask to a MySQL Docker Container (Step-by-Step)
 
 
-In my previous guide, we successfully built a CLI bridge between a basic Python script and an isolated MySQL Docker container.
+In my previous guide, we successfully connected a basic Python script to an isolated MySQL database running inside a Docker container.
 
-Today, we are taking our architecture to the next level. We are upgrading our project from a simple CLI script into a fully functional 2-Tier Web Application using Python Flask as our frontend/backend application layer, and Docker for our persistent database layer.
+
+Today, we are taking our architecture to the next level. We are upgrading our project from a simple terminal script into a fully functional 2-Tier Web Application. We will use Python Flask to build a clean web interface, and Docker to run our background database layer.
+
+Users will be able to type data into a web form, and Flask will store that data directly inside MySQL.
 
 ### Step 1: Start the MySQL Container
 
+Instead of installing a heavy database package directly onto your computer, launch a MySQL container using Docker. This container will act as the storage layer for our web application.
 
+Run the following command in your terminal:
 
 ```docker
 docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=password123 -p 3306:3306 -d mysql:latest
@@ -15,13 +20,20 @@ docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=password123 -p 3306:330
 
 ### Step 2: Install the Required Packages
 
+Our web application needs both the Flask framework and a communication driver to speak to MySQL.
+
+If you are using a modern Linux distribution that restricts global installations, run this command to install the required packages cleanly:
+
+
 ```python
 python3 -m pip install Flask mysql-connector-python --break-system-packages
 ```
 
-### Step 3: Python Flask Application
+### Step 3: Create the Python Flask Application Files
 
-### app.py
+We need two files to build this application: a backend Python script (app.py) and a frontend web layout page (index.html).
+
+vi `app.py`
 
 ```phthon
 from flask import Flask, render_template, request
@@ -80,7 +92,12 @@ if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
 ```
 
-### templates/index.html
+**templates/index.html**
+
+```bash
+mkdir templates
+vi templates/index.html
+```
 
 ```html
 <!DOCTYPE html>
@@ -121,8 +138,9 @@ if __name__ == '__main__':
 python3 app.py
 ```
 
-Open your browser and navigate to http://localhost:5000 (or use your cloud platform's web preview port option). Type your custom strings (e.g., Bilal Amjad
+Open your web browser and go to: http://localhost:5000
 
+You will see a clean user interface. Type a custom message or name into the text field (for example: Bilal Amjad) and click the Deploy to DB button. A green success text message will display indicating that the application successfully talked to the database container.
 
 
 ### Step 5: View Your Stored Data (The Final Proof)
@@ -130,7 +148,7 @@ Open your browser and navigate to http://localhost:5000 (or use your cloud platf
 Let's log directly inside our background Docker container to verify the data is sitting safely in our database.
 
 
-**1. Enter the Container Shell**
+**1. Open the Container Shell**
 
 ```docker
 docker exec -it mysql-container mysql -u root -p
@@ -139,7 +157,7 @@ docker exec -it mysql-container mysql -u root -p
 (Enter password: password123 when prompted)
 
 
-**2. Select Your Database**
+**2. Select the App Database**
 
 ```mysql
 USE web_db;
@@ -167,4 +185,5 @@ exit;
 ```
 
 Conclusion
-Congratulations! 🚀 You have just built, verified, and successfully tested a multi-tier containerized application workflow.
+
+Congratulations! 🚀 You have just built, verified, and successfully tested a multi-tier containerized web application workflow. You now understand how a frontend web server passes information down to a separate database service using custom ports.
