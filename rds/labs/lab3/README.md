@@ -1,5 +1,8 @@
 # How to Connect Python Flask to a MySQL Docker Container (Step-by-Step)
 
+<img width="1376" height="768" alt="image_4ea016e6" src="https://github.com/user-attachments/assets/81167e24-4c2c-4af1-ac5f-1b4fa593a411" />
+
+
 
 In my previous guide, we successfully connected a basic Python script to an isolated MySQL database running inside a Docker container.
 
