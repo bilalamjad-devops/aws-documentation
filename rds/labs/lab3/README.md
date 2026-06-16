@@ -151,6 +151,7 @@ You will see a clean user interface. Type a custom message or name into the text
 
 
 <img width="1598" height="754" alt="lab2 5" src="https://github.com/user-attachments/assets/e2feab35-de29-45bc-b827-3c491528d361" />
+
 ### Step 5: View Your Stored Data (The Final Proof)
 
 Let's log directly inside our background Docker container to verify the data is sitting safely in our database.
@@ -177,6 +178,7 @@ docker exec -it mysql-container mysql -u root -p
 USE web_db;
 ```
 
+<img width="1113" height="116" alt="lab2 7" src="https://github.com/user-attachments/assets/c0c9f5f2-e2d9-467c-88c8-aff74df6bbd1" />
 
 
 **3. View the Data Table**
@@ -185,7 +187,6 @@ USE web_db;
 SELECT * FROM web_table;
 ```
 
-<img width="1113" height="116" alt="lab2 7" src="https://github.com/user-attachments/assets/c0c9f5f2-e2d9-467c-88c8-aff74df6bbd1" />
 
 
 You will see your clean data pop up on the screen:
