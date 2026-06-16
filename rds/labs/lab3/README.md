@@ -17,6 +17,7 @@ Run the following command in your terminal:
 ```docker
 docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=password123 -p 3306:3306 -d mysql:latest
 ```
+<img width="1112" height="358" alt="lab2 1" src="https://github.com/user-attachments/assets/d98deb80-3e6f-4ad0-8b1e-f6f9e6c52fb0" />
 
 ### Step 2: Install the Required Packages
 
@@ -26,8 +27,11 @@ If you are using a modern Linux distribution that restricts global installations
 
 
 ```python
-python3 -m pip install Flask mysql-connector-python --break-system-packages
+python3 -m pip install Flask mysql-connector-python --break-system-packages --ignore-installed
 ```
+
+<img width="1115" height="617" alt="lab2 3" src="https://github.com/user-attachments/assets/9d171784-fb67-41ee-9180-26a5d24c24c5" />
+
 
 ### Step 3: Create the Python Flask Application Files
 
@@ -138,11 +142,15 @@ vi templates/index.html
 python3 app.py
 ```
 
+<img width="1110" height="253" alt="lab2 4" src="https://github.com/user-attachments/assets/d554a355-15b1-4d13-8561-38d42a545353" />
+
+
 Open your web browser and go to: http://localhost:5000
 
 You will see a clean user interface. Type a custom message or name into the text field (for example: Bilal Amjad) and click the Deploy to DB button. A green success text message will display indicating that the application successfully talked to the database container.
 
 
+<img width="1598" height="754" alt="lab2 5" src="https://github.com/user-attachments/assets/e2feab35-de29-45bc-b827-3c491528d361" />
 ### Step 5: View Your Stored Data (The Final Proof)
 
 Let's log directly inside our background Docker container to verify the data is sitting safely in our database.
@@ -154,6 +162,12 @@ Let's log directly inside our background Docker container to verify the data is 
 docker exec -it mysql-container mysql -u root -p
 ```
 
+
+
+<img width="1111" height="311" alt="lab2 6" src="https://github.com/user-attachments/assets/36258166-32f7-4e01-97f6-687bf220589d" />
+
+
+
 (Enter password: password123 when prompted)
 
 
@@ -162,13 +176,22 @@ docker exec -it mysql-container mysql -u root -p
 ```mysql
 USE web_db;
 ```
+
+
+
 **3. View the Data Table**
 
 ```mysql
 SELECT * FROM web_table;
 ```
 
+<img width="1113" height="116" alt="lab2 7" src="https://github.com/user-attachments/assets/c0c9f5f2-e2d9-467c-88c8-aff74df6bbd1" />
+
+
 You will see your clean data pop up on the screen:
+
+<img width="1113" height="170" alt="lab2 8" src="https://github.com/user-attachments/assets/78e6667e-1719-4383-b965-f5b92e8896c4" />
+
 
 ```text
 +----+------------------------------------+
@@ -183,6 +206,10 @@ You will see your clean data pop up on the screen:
 ```mysql
 exit;
 ```
+
+
+<img width="1114" height="52" alt="lab2 9" src="https://github.com/user-attachments/assets/212efee1-5202-4182-951f-10f2c6d09e52" />
+
 
 Conclusion
 
