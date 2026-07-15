@@ -1,4 +1,4 @@
-Bilal 👌 — here are **easy notes** comparing how you set DB variables in **Docker** vs **Kubernetes (K8s)**.  
+Here are **easy notes** comparing how you set DB variables in **Docker** vs **Kubernetes (K8s)**.  
 
 ---
 
